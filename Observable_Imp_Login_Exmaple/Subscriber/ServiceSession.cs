@@ -50,7 +50,7 @@ namespace Observable_Imp_Login_Exmaple
         {
             Console.WriteLine();
             Console.WriteLine($"Got Updated From Publisher");
-            Console.WriteLine($"ServiceAvailable:{data.serviceAvailable}, SemaphoreNumberOfThreads{data.Semaphore.CurrentCount} ");
+            Console.WriteLine($"ServiceAvailable:{data.serviceAvailable}, SemaphoreNumberOfThreads{data.Semaphore.MaximumCount} ");
             Console.WriteLine();
 
         }
@@ -94,6 +94,8 @@ namespace Observable_Imp_Login_Exmaple
         public void Notify(ServiceStatusData data) => serviceStatusProvider.Notify(data);
 
         public void SetNumberOfThreads(int n) => serviceStatusProvider.SetNumberOfThreads(n);
+
+        public void BlockSemaphore() => serviceStatusProvider.BlockSemaphore();
 
     }
 }

@@ -54,7 +54,7 @@ namespace Observable_Imp_Login_Exmaple.Publisher
         {
             //deal with change...
             Console.WriteLine("ServiceStatusChanged fixing...");
-            Console.WriteLine($"new data is:ServiceAvailable:{data.serviceAvailable}, SemaphoreNumberOfThreads{data.Semaphore.CurrentCount}");
+            Console.WriteLine($"new data is:ServiceAvailable:{data.serviceAvailable}, SemaphoreNumberOfThreads{data.Semaphore.MaximumCount}");
 
             foreach (var obs in observers)
             {
@@ -72,9 +72,17 @@ namespace Observable_Imp_Login_Exmaple.Publisher
         public void SetNumberOfThreads(int numberOfThreads)
         {
             Console.WriteLine($"ServiceStatusProvider - SetNumberOfThreads = |{numberOfThreads}|");
-            this.serviceStatusData.Semaphore = new SemaphoreSlim(numberOfThreads, numberOfThreads);
+            this.serviceStatusData.Semaphore.MaximumCount = numberOfThreads;
             ServiceStatusChanged(this.serviceStatusData);
         }
+
+        public void BlockSemaphore()
+        {
+            Console.WriteLine($"Blocking Semaphore for all Threads...");
+            this.serviceStatusData.Semaphore.BlockSemaphore();
+            ServiceStatusChanged(this.serviceStatusData);
+        }
+
 
         public void Notify(bool serviceAvailable)
         {

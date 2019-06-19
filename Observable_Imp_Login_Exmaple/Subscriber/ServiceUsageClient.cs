@@ -24,7 +24,7 @@ namespace Observable_Imp_Login_Exmaple.Subscriber
         public void Status()
         {
             Console.WriteLine($"Got Updated From Publisher");
-            Console.WriteLine($"ServiceAvailable:{data.serviceAvailable}, SemaphoreNumberOfThreads{data.Semaphore.CurrentCount} ");
+            Console.WriteLine($"ServiceAvailable:{data.serviceAvailable}, SemaphoreNumberOfThreads{data.Semaphore.MaximumCount} ");
         }
 
         public void Subscribe(IObservable<ServiceStatusData> provider)

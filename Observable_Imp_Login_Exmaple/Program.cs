@@ -40,7 +40,7 @@ namespace Observable_Imp_Login_Exmaple
                         t1.Start(i);
                     }
                     
-                    Thread.Sleep(1000);
+                    Thread.Sleep(500);
                 }
 
 
@@ -59,7 +59,7 @@ namespace Observable_Imp_Login_Exmaple
             {
                 Enabled = true,
                 AutoReset = true,
-                Interval = TimeSpan.FromSeconds(10).TotalMilliseconds
+                Interval = TimeSpan.FromSeconds(4).TotalMilliseconds
             };
             aTimer.Elapsed += SimulateServiceFailure;
 
@@ -71,19 +71,12 @@ namespace Observable_Imp_Login_Exmaple
             ServiceSession serviceSession = ServiceSession.Instance;
 
 
-            lock (serviceSession.data._workLock) {
-                //Console.WriteLine(i + " wants to enter");
-                serviceSession.data.Semaphore.Wait();
+                serviceSession.data.Semaphore.WaitOne();
                 Console.WriteLine($"Currently Runing Thread:[{i}]");
-                //Console.WriteLine("Notify Publisher about failed Service...");
                 serviceSession.Notify(!serviceSession.data.serviceAvailable);
-                Thread.Sleep(100);
-                //Console.WriteLine(i + " is leaving");       // a time.
-                Console.WriteLine($"SimulateThreadJob - Semaphore Number Of Threads{serviceSession.data.Semaphore.CurrentCount},maxThreads={maxThreads} ");
-
-                if(serviceSession.data.Semaphore.CurrentCount !=maxThreads)
+                Thread.Sleep(500);
                 serviceSession.data.Semaphore.Release();
-            }
+            
             
         }
 
@@ -91,20 +84,28 @@ namespace Observable_Imp_Login_Exmaple
         {
             ServiceSession serviceSession = ServiceSession.Instance;
 
-
-            lock(serviceSession.data._workLock)
-            {
                 Console.WriteLine();
                 Console.WriteLine();
                 Console.WriteLine();
                 Console.WriteLine();
                 Console.WriteLine();
 
-                Console.WriteLine("******* Service Went down please wait 20 seconds... **********");
+                Console.WriteLine("******* Service Went down please wait 4 seconds... **********");
                 Console.WriteLine();
-                Thread.Sleep(20000);
+                Console.WriteLine("******* Blocking...... **********");
+                Console.WriteLine("******* Blocking...... **********");
+                Console.WriteLine("******* Blocking...... **********");
 
-                serviceSession.SetNumberOfThreads(maxThreads += 2);
+            serviceSession.BlockSemaphore();
+
+                Thread.Sleep(4000);
+
+            Console.WriteLine("******* Un Blocking...... **********");
+            Console.WriteLine("******* Un Blocking...... **********");
+            Console.WriteLine("******* Un Blocking...... **********");
+
+            serviceSession.SetNumberOfThreads(maxThreads += 2);
+
                 Console.WriteLine($"******* SetNumberOfThreads to |{maxThreads}|... **********");
 
                 Console.WriteLine("******* Service is up and Running... **********");
@@ -113,11 +114,7 @@ namespace Observable_Imp_Login_Exmaple
                 Console.WriteLine();
                 Console.WriteLine();
                 Console.WriteLine();
-            }
-           
-
-
-
+          
 
 
         }

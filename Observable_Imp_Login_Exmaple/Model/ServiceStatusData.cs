@@ -13,14 +13,14 @@ namespace Observable_Imp_Login_Exmaple.Model
         {
             serviceAvailable = true;
             __lockWasTaken = false;
-            Semaphore = new SemaphoreSlim((numberOfThreads < 0 || numberOfThreads > 100 * 1000) ? 10 : numberOfThreads);
+            Semaphore = new AdjustableSemaphore((numberOfThreads < 0 || numberOfThreads > 100 * 1000) ? 10 : numberOfThreads);
         }
         public bool serviceAvailable { get; set; } //isRemoteServiceAvailable?
 
         public  bool __lockWasTaken = false;
 
 
-        public SemaphoreSlim Semaphore { get; set; } //set number of concurrent threads
+        public AdjustableSemaphore Semaphore { get; set; } //set number of concurrent threads
 
         public readonly object _workLock = new object(); //pause all work on Subscriber, service is down for some reason...
 
